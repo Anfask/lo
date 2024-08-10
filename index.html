@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="fav.png">
+    <title>Windows Server 2024</title>
+    <style>
+        @font-face {
+            font-family: 'MyLocalFont';
+            src: url('fonts/SDGlitch_Demo.ttf') format('truetype');
+        }
+        @font-face {
+            font-family: 'MyLocalFontBold';
+            src: url('fonts/SDGlitch_Demo.ttf') format('truetype');
+        }
+        body, html {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'MyLocalFont', Arial, sans-serif;
+            background-color: black;
+            color: rgb(255, 0, 0);
+        }
+        #mainVideo, #backgroundVideo {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        #mainVideo {
+            z-index: 2;
+        }
+        #backgroundVideo {
+            z-index: 1;
+            opacity: 0.3;
+        }
+        #message {
+            position: absolute;
+            z-index: 3;
+            font-size: 5em;
+            text-align: center;
+            color: rgb(255, 0, 0);
+            animation: scale 2s infinite;
+            font-family: 'MyLocalFontBold', Arial, sans-serif;
+            display: none;
+        }
+        #footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 10%;
+            color: rgb(0, 255, 34);
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1em;
+            font-weight: 600;
+            font-family: Arial, sans-serif;
+        }
+        #footer1{
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 10%;
+            background-color: black;
+            color: rgb(0, 255, 34);
+            text-align: center;
+            justify-content: center;
+            font-size: 1em;
+            font-weight: 600;
+            font-family: Arial, sans-serif;
+        }
+
+
+        @keyframes scale {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+    </style>
+</head>
+<body>
+    <video id="mainVideo">
+        <source src="main.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <video id="backgroundVideo" loop>
+        <source src="back.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <div id="message">Your System Connected to the Server</div>
+    <div id="footer1">Dude login the windows</div>
+    <div id="footer">Loading IP address...</div>
+
+    <script>
+        const mainVideo = document.getElementById('mainVideo');
+        const backgroundVideo = document.getElementById('backgroundVideo');
+        const message = document.getElementById('message');
+        const footer = document.getElementById('footer');
+        const footer1 = document.getElementById('footer1');
+
+        // Play the main video once
+        mainVideo.play().catch(error => {
+            console.error("Error playing video:", error);
+        });
+
+        mainVideo.onended = function() {
+            mainVideo.style.display = 'none';
+            backgroundVideo.play();
+            message.style.display = 'block';
+            footer.style.display = 'flex';
+            footer1.style.display = 'flex';
+        };
+
+        fetch('https://api.ipify.org?format=json')
+            .then(response => response.json())
+            .then(data => {
+                footer.innerText = 'Your IP address is: ' + data.ip;
+            })
+            .catch(error => {
+                footer.innerText = 'Unable to fetch IP address.';
+                console.error('Error fetching IP address:', error);
+            });
+    </script>
+</body>
+</html>
